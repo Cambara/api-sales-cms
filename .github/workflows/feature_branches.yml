@@ -14,8 +14,18 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-        cache: npm
-    - name: Test Cov with node version ${{ matrix.node-version }}
-      id: test-cov
-      run: | 
-        npm run test:cov
+        cache: 'npm'
+
+    - name: Cache NPM dependencies
+      uses: actions/cache@v3
+      id: cache-primes
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+
+    - name: Install dependencies
+      if: steps.cache-primes.outputs.cache-hit != 'true'
+      run: npm ci
+
+    - name: Build
+      run: npm run test:cov
