@@ -27,5 +27,5 @@ jobs:
       if: steps.cache-primes.outputs.cache-hit != 'true'
       run: npm ci
 
-    - name: Build
+    - name: Execute Test Cov
       run: npm run test:cov
