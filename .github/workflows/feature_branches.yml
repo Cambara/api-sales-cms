@@ -10,11 +10,12 @@ jobs:
       matrix:
         node-version: [16.x]
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: npm ci
-      - run: npm run test:cov
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: npm
+    - name: Test Cov with node version ${{ matrix.node-version }}
+      id: test-cov
+      run: | 
+        npm run test:cov
