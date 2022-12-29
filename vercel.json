@@ -5,7 +5,7 @@
     "functions": {
         "src/main.js": {
             "memory": 3008,
-            "maxDuration": 29
+            "maxDuration": 10
         }
     },
     "rewrites": [
