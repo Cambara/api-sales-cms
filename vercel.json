@@ -1,5 +1,11 @@
 {
     "version": 2,
     "buildCommand": "npm run db:migrate",
-    "outputDirectory": "dist"
+    "outputDirectory": "dist",
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "src/main.js"
+        }
+    ]
 }
