@@ -3,7 +3,9 @@
     "buildCommand": "npm run db:migrate",
     "outputDirectory": "dist",
     "functions": {
-        "src/main.js": {}
+        "src/main.js": {
+            "memory": 2000 
+        }
     },
     "rewrites": [
         {
