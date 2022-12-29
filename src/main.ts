@@ -1,24 +1,10 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { configEnum } from './config/config.loader';
 import { IHttpConfig } from './config/config_loader.interface';
-
-function setupSwagger(app: INestApplication) {
-  const config = new DocumentBuilder().setTitle('SALES CMS API').build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
-}
-
-function setupValidation(app: INestApplication) {
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-    }),
-  );
-}
+import { setupSwagger, setupValidation } from './config/setup.config';
 
 async function setupHost(app: INestApplication) {
   const configService = app.get<ConfigService>(ConfigService);
