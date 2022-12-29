@@ -3,6 +3,8 @@ service: api-sales-cms
 provider:
   name: aws
   runtime: nodejs16.x
+  state: dev
+  region: us-east-1
 
 plugins:
   - serverless-offline
