@@ -3,9 +3,7 @@
     "buildCommand": "npm run db:migrate",
     "outputDirectory": "dist",
     "functions": {
-        "src/main.js": {
-          "runtime": "@vercel/node"
-        }
+        "src/main.js": {}
     },
     "rewrites": [
         {
