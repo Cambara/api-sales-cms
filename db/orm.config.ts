@@ -8,7 +8,7 @@ export const dataSourceOptions: DataSourceOptions = {
   username: process.env.DB_USERNAME || 'postgres',
   password: process.env.DB_PASSWORD || 'postgres',
   name: 'default',
-  entities: [__dirname + '/../**/*.entity.{js,ts}'],
+  entities: ['dist/**/*.entity{.ts,.js}'],
   migrations: ['dist/db/migrations/*{.ts,.js}'],
   migrationsTableName: 'migrations_typeorm',
   migrationsRun: true,
