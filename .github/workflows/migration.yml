@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Get Environment
     steps:
-    - name: test
+    - name: get_environment
       id: branch_check
       run: |
         echo "Running on branch ${{ github.ref }}"
@@ -17,10 +17,10 @@ jobs:
         elif [ "${{ github.ref }}" = "refs/heads/develop" ]; then
           echo "::set-output name=env_name::develop"
         else
-          echo "::set-output name=env_name::develop"
+          echo "::set-output name=env_name::unconfigured_environment"
         fi
-    - name: test 2
-      run: echo "I'm using variable ${{ steps.branch_check.outputs.env_name }}"
+    - name: check_environment
+      run: echo "Branch "${{ github.ref }}" | echo "Environment ${{ steps.branch_check.outputs.env_name }}"
     outputs:
       env_name: ${{ steps.branch_check.outputs.env_name }}
   
