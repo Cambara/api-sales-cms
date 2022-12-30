@@ -1,8 +1,9 @@
 name: Migration
 
 on:
-  push:
-    branches: [ 'sc-72-setup-the-pipeline-to-test-env-for-the-backend' ]
+  pull_request:
+    branches: [ 'main', 'develop' ]
+    types: [closed]
 jobs:
   pre-deploy:
     runs-on: ubuntu-latest
@@ -25,37 +26,39 @@ jobs:
       env_name: ${{ steps.branch_check.outputs.env_name }}
   
   deploy:
-    needs: [pre-deploy]
-    name: deploy
-    runs-on: ubuntu-latest
-    environment:
-      name: ${{ needs.pre-deploy.outputs.env_name }}
-    strategy:
-      matrix:
-        node-version: [16.x]
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
+    if_merged:
+      if: github.event.pull_request.merged == true
+      needs: [pre-deploy]
+      name: deploy
+      runs-on: ubuntu-latest
+      environment:
+        name: ${{ needs.pre-deploy.outputs.env_name }}
+      strategy:
+        matrix:
+          node-version: [16.x]
+      steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
-    - name: Cache NPM dependencies
-      uses: actions/cache@v3
-      id: cache-primes
-      with:
-        path: node_modules
-        key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+      - name: Cache NPM dependencies
+        uses: actions/cache@v3
+        id: cache-primes
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
 
-    - name: Install dependencies
-      if: steps.cache-primes.outputs.cache-hit != 'true'
-      run: npm ci
-    
-    - name: Migration
-      run: npm run db:migrate
-      env:
-        DB_HOST: ${{secrets.DB_HOST}}
-        DB_PORT: ${{secrets.DB_PORT}}
-        DB_DATABASE: ${{secrets.DB_DATABASE}}
-        DB_USERNAME: ${{secrets.DB_USERNAME}}
-        DB_PASSWORD: ${{secrets.DB_PASSWORD}}
+      - name: Install dependencies
+        if: steps.cache-primes.outputs.cache-hit != 'true'
+        run: npm ci
+      
+      - name: Migration
+        run: npm run db:migrate
+        env:
+          DB_HOST: ${{secrets.DB_HOST}}
+          DB_PORT: ${{secrets.DB_PORT}}
+          DB_DATABASE: ${{secrets.DB_DATABASE}}
+          DB_USERNAME: ${{secrets.DB_USERNAME}}
+          DB_PASSWORD: ${{secrets.DB_PASSWORD}}
