@@ -9,6 +9,7 @@ jobs:
     name: Get Environment
     steps:
     - name: test
+      id: branch_check
       run: |
         echo "Running on branch ${{ github.ref }}"
         if [ "${{ github.ref }}" = "refs/heads/main" ]; then
