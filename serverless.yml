@@ -1,0 +1,29 @@
+service: api-sales-cms
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: dev
+  region: us-east-1
+
+plugins:
+  - serverless-offline
+
+package:
+  exclude:
+    - .git/**
+    - db/**
+    - src/**
+    - test/**
+    - README.md
+    
+functions:
+  index:
+    handler: dist/src/index.handler
+    events:
+      - http:
+          method: ANY
+          path: /
+      - http:
+          method: ANY
+          path: '{proxy+}'
