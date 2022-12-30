@@ -19,8 +19,6 @@ jobs:
         else
           echo "::set-output name=env_name::unconfigured_environment"
         fi
-    - name: check_branch
-      run: echo "Branch "${{ github.ref }}"
     - name: check_environment
       run: echo "Environment ${{ steps.branch_check.outputs.env_name }}"
     outputs:
