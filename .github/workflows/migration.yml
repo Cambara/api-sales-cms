@@ -5,29 +5,29 @@ on:
     types:
       - closed
 jobs:
-  if_merged:
-      if: github.event.pull_request.merged == true
-      pre-deploy:
-        runs-on: ubuntu-latest
-        name: Get Environment
-        steps:
-        - name: get_environment
-          id: branch_check
-          run: |
-            echo "Running on branch ${{ github.ref }}"
-            if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-              echo "::set-output name=env_name::production"
-            elif [ "${{ github.ref }}" = "refs/heads/develop" ]; then
-              echo "::set-output name=env_name::develop"
-            else
-              echo "::set-output name=env_name::unconfigured_environment"
-            fi
-        - name: check_environment
-          run: echo "Environment ${{ steps.branch_check.outputs.env_name }}"
-        outputs:
-          env_name: ${{ steps.branch_check.outputs.env_name }}
-      
+  pre-deploy:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    name: Get Environment
+    steps:
+    - name: get_environment
+      id: branch_check
+      run: |
+        echo "Running on branch ${{ github.ref }}"
+        if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+          echo "::set-output name=env_name::production"
+        elif [ "${{ github.ref }}" = "refs/heads/develop" ]; then
+          echo "::set-output name=env_name::develop"
+        else
+          echo "::set-output name=env_name::unconfigured_environment"
+        fi
+    - name: check_environment
+      run: echo "Environment ${{ steps.branch_check.outputs.env_name }}"
+    outputs:
+      env_name: ${{ steps.branch_check.outputs.env_name }}
+  
   deploy:
+    if: github.event.pull_request.merged == true
     needs: [pre-deploy]
     name: deploy
     runs-on: ubuntu-latest
