@@ -10,6 +10,7 @@ jobs:
     outputs:
       env_name: ${{ steps.branch_check.outputs.env_name }}
     steps:
+    - name: test
       run: |
         echo "Running on branch ${{ github.ref }}"
         if [ "${{ github.ref }}" = "refs/heads/main" ]; then
@@ -19,6 +20,8 @@ jobs:
         else
           echo "::set-output name=env_name::develop"
         fi
+    - name: test 2
+      run: echo "I'm using variable ${{ steps.branch_check.outputs.env_name }}"
   
   deploy:
     name: deploy
