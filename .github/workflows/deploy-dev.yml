@@ -39,7 +39,7 @@ jobs:
 
 
     - name: Serverless Deploy
-      uses: serverless/github-action@3.1
+      uses: serverless/github-action@v3.1
       with:
         args:  doctor
       env:
