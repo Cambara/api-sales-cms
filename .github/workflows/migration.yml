@@ -1,4 +1,4 @@
-name: Deploy Lambda Dev
+name: Migration
 
 on:
   push:
@@ -28,8 +28,8 @@ jobs:
       if: steps.cache-primes.outputs.cache-hit != 'true'
       run: npm ci
     
-    - name: Build Application
-      run: npm run build:production
+    - name: Migration
+      run: npm run db:migrate
       env:
         DB_HOST: ${{secrets.DB_HOST}}
         DB_PORT: ${{secrets.DB_PORT}}
