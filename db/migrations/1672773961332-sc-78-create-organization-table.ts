@@ -22,6 +22,11 @@ export class sc78CreateOrganizationTable1672773961332
             isNullable: false,
           },
           {
+            name: 'is_activated',
+            type: 'bool',
+            isNullable: false,
+          },
+          {
             name: 'created_at',
             type: 'datetime',
             isNullable: false,
