@@ -10,7 +10,7 @@ export class sc78CreateOrganizationTable1672773961332
         columns: [
           {
             name: 'id',
-            type: 'bigint',
+            type: 'int(11)',
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment',

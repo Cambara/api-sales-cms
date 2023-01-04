@@ -10,7 +10,7 @@ export class sc78CreateJobTitleTable1672775074348
         columns: [
           {
             name: 'id',
-            type: 'bigint',
+            type: 'int(11)',
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment',
