@@ -8,7 +8,7 @@ export interface IDefaultWithTimestampsModel extends IDefaultModel {
 }
 
 export abstract class DefaultModel implements IDefaultModel {
-  id!: number;
+  id: number;
   constructor({ id }: IDefaultModel) {
     this.id = id;
   }
@@ -17,12 +17,12 @@ export abstract class DefaultModel implements IDefaultModel {
 export abstract class DefaultWithTimestampsModel
   implements IDefaultWithTimestampsModel
 {
-  id!: number;
+  id: number;
   createdAt!: Date;
   updatedAt!: Date;
-  constructor({ id }: IDefaultWithTimestampsModel) {
+  constructor({ id, createdAt, updatedAt }: IDefaultWithTimestampsModel) {
     this.id = id;
-    this.createdAt;
-    this.updatedAt;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }
