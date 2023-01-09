@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   ITransactionHelperMockFeatures,
-  UserTestRepositoryMockFactory,
+  TransactionHelperMockFactory,
 } from '../../../../test/mocks/infra/database/helpers/transaction.helper.mock';
 import { OrganizationEntity } from '../entities/organization.entity';
 import { OrganizationRepository } from './organization.repository';
@@ -24,7 +24,7 @@ describe('UserTestRepository', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         OrganizationRepository,
-        UserTestRepositoryMockFactory(features),
+        TransactionHelperMockFactory(features),
       ],
     }).compile();
     organizationRepository = module.get(OrganizationRepository);

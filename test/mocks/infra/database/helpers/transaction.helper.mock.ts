@@ -28,6 +28,6 @@ class TransactionHelperMock implements ITransactionHelper {
   }
 }
 
-export const UserTestRepositoryMockFactory = (
+export const TransactionHelperMockFactory = (
   features: ITransactionHelperMockFeatures,
 ) => createMockProvider(TransactionHelper, new TransactionHelperMock(features));
