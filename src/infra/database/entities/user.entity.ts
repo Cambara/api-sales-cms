@@ -37,7 +37,7 @@ export class UserEntity implements IUserModel {
   profile: IProfileModel;
 
   @CreateDateColumn({
-    name: 'create_at',
+    name: 'created_at',
   })
   createdAt: Date;
 
