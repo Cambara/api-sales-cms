@@ -26,7 +26,7 @@ export class UserModel
   constructor({ id, createdAt, updatedAt, ...data }: IUserModel) {
     super({ id, createdAt, updatedAt });
     this.email = data.email;
-    this.password = this.password;
+    this.password = data.password;
     this.isBlocked = data.isBlocked;
     this.profile = data.profile;
     this.employees = data.employees;
