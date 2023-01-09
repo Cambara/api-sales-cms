@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { OrganizationModel } from '../../../domain/models/organization.model';
 import { OrganizationEntity } from '../entities/organization.entity';
 import { TransactionHelper } from '../helpers/transaction.helper';
-import { convertDbToModal } from '../mappers/organization.mapper';
+import { convertDbToModel } from '../mappers/organization.mapper';
 
 interface ICreateDto {
   name: string;
 }
 
 export interface IOrganizationRepository {
-  create(ICreateDto): Promise<OrganizationEntity>;
+  create(ICreateDto): Promise<OrganizationModel>;
 }
 
 @Injectable()
@@ -23,6 +23,6 @@ export class OrganizationRepository implements IOrganizationRepository {
     const [entity] = await this.transactionHelper.save<OrganizationEntity>([
       data,
     ]);
-    return convertDbToModal(entity);
+    return convertDbToModel(entity);
   }
 }
