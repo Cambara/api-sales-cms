@@ -66,5 +66,24 @@ describe('EmployeeRepository', () => {
       });
       expect(result.isOwner).toEqual(true);
     });
+
+    it('Should create a valid employee without a job title', async () => {
+      jest.spyOn(transactionHelper, 'save');
+
+      await employeeRepository.create({
+        organizationId: 1,
+        userId: 2,
+      });
+
+      expect(transactionHelper.save).toHaveBeenCalledWith([
+        {
+          organization: { id: 1 },
+          user: { id: 2 },
+          isBlocked: false,
+          isOwner: false,
+          isActivated: true,
+        },
+      ]);
+    });
   });
 });
