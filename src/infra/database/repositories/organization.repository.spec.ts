@@ -32,7 +32,7 @@ describe('UserTestRepository', () => {
 
   describe('create', () => {
     it('Should create a valid organization', async () => {
-      const result = await organizationRepository.create('test');
+      const result = await organizationRepository.create({ name: 'test' });
       expect(result.name).toEqual('test');
       expect(result.id).toEqual(1);
       expect(result.isActivated).toEqual(true);
