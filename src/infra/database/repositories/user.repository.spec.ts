@@ -7,6 +7,8 @@ import {
 } from '../../../../test/mocks/infra/database/helpers/transaction.helper.mock';
 import { UserEntity } from '../entities/user.entity';
 import { UserRepository } from './user.repository';
+import { Repository } from 'typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
 
 const features: ITransactionHelperMockFeatures = {
   save(data: UserEntity[]): UserEntity[] {
@@ -21,6 +23,7 @@ const features: ITransactionHelperMockFeatures = {
 
 describe('UserRepository', () => {
   let userRepository: UserRepository;
+  let userEntity: Repository<UserEntity>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -31,6 +34,11 @@ describe('UserRepository', () => {
       ],
     }).compile();
     userRepository = module.get(UserRepository);
+    userEntity = module.get(getRepositoryToken(UserEntity));
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   describe('create', () => {
@@ -55,6 +63,17 @@ describe('UserRepository', () => {
       });
 
       expect(result).toBeInstanceOf(UserModel);
+    });
+
+    it('Should not find any user', async () => {
+      jest
+        .spyOn(userEntity, 'findOne')
+        .mockImplementationOnce(() => Promise.resolve(null));
+      const result = await userRepository.findOne({
+        email: 'test@email.com',
+      });
+
+      expect(result).toEqual(null);
     });
   });
 });
