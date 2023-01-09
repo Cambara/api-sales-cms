@@ -1,4 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { UserModel } from '../../../domain/models/user.model';
+import { UserEntityMock } from '../../../../test/mocks/infra/database/entities/user.entity.mock';
 import {
   ITransactionHelperMockFeatures,
   TransactionHelperMockFactory,
@@ -22,7 +24,11 @@ describe('UserRepository', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UserRepository, TransactionHelperMockFactory(features)],
+      providers: [
+        UserRepository,
+        TransactionHelperMockFactory(features),
+        UserEntityMock,
+      ],
     }).compile();
     userRepository = module.get(UserRepository);
   });
@@ -39,6 +45,16 @@ describe('UserRepository', () => {
       expect(result.isBlocked).toEqual(false);
       expect(result.createdAt).toBeInstanceOf(Date);
       expect(result.updatedAt).toBeInstanceOf(Date);
+    });
+  });
+
+  describe('findOne', () => {
+    it('Should find a user by email', async () => {
+      const result = await userRepository.findOne({
+        email: 'test@email.com',
+      });
+
+      expect(result).toBeInstanceOf(UserModel);
     });
   });
 });
