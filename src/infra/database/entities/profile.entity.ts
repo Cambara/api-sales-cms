@@ -19,14 +19,12 @@ export class ProfileEntity implements IProfileModel {
     nullable: false,
     name: 'first_name',
   })
-  @Column()
   firstName: string;
 
   @Column({
     nullable: false,
     name: 'last_name',
   })
-  @Column()
   lastName: string;
 
   @OneToOne(() => UserEntity)
