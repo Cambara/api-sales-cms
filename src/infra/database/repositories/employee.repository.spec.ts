@@ -56,5 +56,15 @@ describe('EmployeeRepository', () => {
         },
       ]);
     });
+
+    it('Should create a valid owner employee', async () => {
+      const result = await employeeRepository.create({
+        organizationId: 1,
+        userId: 2,
+        jobTitleId: 3,
+        isOwner: true,
+      });
+      expect(result.isOwner).toEqual(true);
+    });
   });
 });
