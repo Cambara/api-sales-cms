@@ -16,6 +16,10 @@ import { UserRepository } from '../../infra/database/repositories/user.repositor
 import { OrganizationRepository } from '../../infra/database/repositories/organization.repository';
 import { EmployeeRepository } from '../../infra/database/repositories/employee.repository';
 import { JobTitleRepository } from '../../infra/database/repositories/job_title.repository';
+import {
+  ICryptographyAdapter,
+  CRYPTOGRAPHY_KEY,
+} from '../../infra/cryptography/cryptography.protocol';
 
 const features: ITransactionHelperMockFeatures = {
   save(data: any[]): any[] {
@@ -38,6 +42,7 @@ describe('SignupService', () => {
   let userRepository: UserRepository;
   let employeeRepository: EmployeeRepository;
   let jobTitleRepository: JobTitleRepository;
+  let cryptographyAdapter: ICryptographyAdapter;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -59,10 +64,15 @@ describe('SignupService', () => {
     organizationRepository = module.get(OrganizationRepository);
     employeeRepository = module.get(EmployeeRepository);
     jobTitleRepository = module.get(JobTitleRepository);
+    cryptographyAdapter = module.get(CRYPTOGRAPHY_KEY);
 
     jest
       .spyOn(userRepository, 'findOne')
       .mockImplementation(() => Promise.resolve(null));
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   describe('handle', () => {
@@ -102,6 +112,22 @@ describe('SignupService', () => {
         userId: user.id,
         isOwner: true,
         jobTitleId: jobTitle.id,
+      });
+    });
+
+    it('Should create a user with correct data', async () => {
+      jest.spyOn(userRepository, 'create');
+      const cryptographySpy = jest.spyOn(cryptographyAdapter, 'encrypt');
+
+      const sut = createSut();
+      await signupService.handle(sut);
+
+      const encryptedPassword = await cryptographySpy.mock.results[0].value;
+
+      expect(userRepository.create).toBeCalledTimes(1);
+      expect(userRepository.create).toBeCalledWith({
+        email: sut.email,
+        password: encryptedPassword,
       });
     });
   });
