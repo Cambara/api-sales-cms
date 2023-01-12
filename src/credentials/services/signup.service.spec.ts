@@ -20,6 +20,7 @@ import {
   ICryptographyAdapter,
   CRYPTOGRAPHY_KEY,
 } from '../../infra/cryptography/cryptography.protocol';
+import { ProfileRepository } from '../../infra/database/repositories/profile.repository';
 
 const features: ITransactionHelperMockFeatures = {
   save(data: any[]): any[] {
@@ -43,6 +44,7 @@ describe('SignupService', () => {
   let employeeRepository: EmployeeRepository;
   let jobTitleRepository: JobTitleRepository;
   let cryptographyAdapter: ICryptographyAdapter;
+  let profileRepository: ProfileRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -65,6 +67,7 @@ describe('SignupService', () => {
     employeeRepository = module.get(EmployeeRepository);
     jobTitleRepository = module.get(JobTitleRepository);
     cryptographyAdapter = module.get(CRYPTOGRAPHY_KEY);
+    profileRepository = module.get(ProfileRepository);
 
     jest
       .spyOn(userRepository, 'findOne')
@@ -128,6 +131,23 @@ describe('SignupService', () => {
       expect(userRepository.create).toBeCalledWith({
         email: sut.email,
         password: encryptedPassword,
+      });
+    });
+
+    it('Should create a profile with correct data', async () => {
+      jest.spyOn(profileRepository, 'create');
+      const userSpy = jest.spyOn(userRepository, 'create');
+
+      const sut = createSut();
+      await signupService.handle(sut);
+
+      const user = await userSpy.mock.results[0].value;
+
+      expect(profileRepository.create).toBeCalledTimes(1);
+      expect(profileRepository.create).toBeCalledWith({
+        firstName: sut.firstName,
+        lastName: sut.lastName,
+        userId: user.id,
       });
     });
   });
