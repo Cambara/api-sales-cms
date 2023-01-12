@@ -4,12 +4,12 @@ import { OrganizationEntity } from '../entities/organization.entity';
 import { TransactionHelper } from '../helpers/transaction.helper';
 import { convertDbToModel } from '../mappers/organization.mapper';
 
-interface ICreateDto {
+export interface ICreateDto {
   name: string;
 }
 
 export interface IOrganizationRepository {
-  create(ICreateDto): Promise<OrganizationModel>;
+  create(dto: ICreateDto): Promise<OrganizationModel>;
 }
 
 @Injectable()

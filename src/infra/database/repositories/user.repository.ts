@@ -6,12 +6,12 @@ import { UserEntity } from '../entities/user.entity';
 import { TransactionHelper } from '../helpers/transaction.helper';
 import { convertDbToModel } from '../mappers/user.mapper';
 
-interface ICreateDto {
+export interface ICreateDto {
   email: string;
   password: string;
 }
 
-interface IFindOneDto {
+export interface IFindOneDto {
   email?: string;
 }
 

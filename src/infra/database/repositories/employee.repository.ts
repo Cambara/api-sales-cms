@@ -7,19 +7,19 @@ import { UserEntity } from '../entities/user.entity';
 import { TransactionHelper } from '../helpers/transaction.helper';
 import { convertDbToModel } from '../mappers/employee.mapper';
 
-interface ICreateDto {
+export interface ICreateDto {
   organizationId: number;
   userId: number;
   jobTitleId?: number;
   isOwner?: boolean;
 }
 
-export interface IOrganizationRepository {
+export interface IEmployeeRepository {
   create(dto: ICreateDto): Promise<EmployeeModel>;
 }
 
 @Injectable()
-export class EmployeeRepository implements IOrganizationRepository {
+export class EmployeeRepository implements IEmployeeRepository {
   constructor(private readonly transactionHelper: TransactionHelper) {}
 
   async create({
