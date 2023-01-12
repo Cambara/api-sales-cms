@@ -51,8 +51,8 @@ export class CredentialService {
       throw new Error('Job title not found');
     }
 
-    dto.password = await this.cryptographyAdapter.encrypt(dto.password);
-    await this.createAccount({ ...dto, jobTitleId: jobTitle.id });
+    const password = await this.cryptographyAdapter.encrypt(dto.password);
+    await this.createAccount({ ...dto, password, jobTitleId: jobTitle.id });
   }
 
   private async createAccount({
