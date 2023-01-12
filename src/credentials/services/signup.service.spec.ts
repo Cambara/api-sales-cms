@@ -21,6 +21,7 @@ import {
   CRYPTOGRAPHY_KEY,
 } from '../../infra/cryptography/cryptography.protocol';
 import { ProfileRepository } from '../../infra/database/repositories/profile.repository';
+import { UserModel } from '../../domain/models/user.model';
 
 const features: ITransactionHelperMockFeatures = {
   save(data: any[]): any[] {
@@ -158,6 +159,29 @@ describe('SignupService', () => {
       await signupService.handle(sut);
 
       expect(transactionHelper.commit).toBeCalledTimes(1);
+      expect(transactionHelper.rollback).toBeCalledTimes(0);
+    });
+
+    it('Should throw an error when finding a user with the same email', async () => {
+      const userMock = new UserModel({
+        id: 1,
+        email: 'email@host.com',
+        password: 'password',
+        isBlocked: false,
+      });
+
+      const userFindSpy = jest
+        .spyOn(userRepository, 'findOne')
+        .mockImplementation(() => Promise.resolve(userMock));
+      jest.spyOn(transactionHelper, 'commit');
+      jest.spyOn(transactionHelper, 'rollback');
+
+      const sut = createSut();
+
+      await expect(signupService.handle(sut)).rejects.toThrowError();
+      const user = await userFindSpy.mock.results[0].value;
+      expect(user).toBe(userMock);
+      expect(transactionHelper.commit).toBeCalledTimes(0);
       expect(transactionHelper.rollback).toBeCalledTimes(0);
     });
   });
