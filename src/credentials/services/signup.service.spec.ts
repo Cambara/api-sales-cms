@@ -150,5 +150,15 @@ describe('SignupService', () => {
         userId: user.id,
       });
     });
+
+    it('Should commit the transaction', async () => {
+      jest.spyOn(transactionHelper, 'commit');
+      jest.spyOn(transactionHelper, 'rollback');
+      const sut = createSut();
+      await signupService.handle(sut);
+
+      expect(transactionHelper.commit).toBeCalledTimes(1);
+      expect(transactionHelper.rollback).toBeCalledTimes(0);
+    });
   });
 });
