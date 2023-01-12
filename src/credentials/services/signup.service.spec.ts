@@ -75,8 +75,8 @@ describe('SignupService', () => {
       .mockImplementation(() => Promise.resolve(null));
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
+  afterEach(async () => {
+    await jest.clearAllMocks();
   });
 
   describe('handle', () => {
@@ -188,7 +188,7 @@ describe('SignupService', () => {
     it('Should throw an error when not finding a job title', async () => {
       const jobTitleSpy = jest
         .spyOn(jobTitleRepository, 'findOneByName')
-        .mockImplementation(() => Promise.resolve(null));
+        .mockImplementationOnce(() => Promise.resolve(null));
       jest.spyOn(transactionHelper, 'commit');
       jest.spyOn(transactionHelper, 'rollback');
 
@@ -199,6 +199,20 @@ describe('SignupService', () => {
       expect(jobTitle).toBe(null);
       expect(transactionHelper.commit).toBeCalledTimes(0);
       expect(transactionHelper.rollback).toBeCalledTimes(0);
+    });
+
+    it('Should throw an error and rollback the operation when has any error on the saved flow', async () => {
+      jest
+        .spyOn(employeeRepository, 'create')
+        .mockImplementation(() => Promise.reject(new Error()));
+      jest.spyOn(transactionHelper, 'commit');
+      jest.spyOn(transactionHelper, 'rollback');
+
+      const sut = createSut();
+
+      await expect(signupService.handle(sut)).rejects.toThrowError();
+      expect(transactionHelper.commit).toBeCalledTimes(0);
+      expect(transactionHelper.rollback).toBeCalledTimes(1);
     });
   });
 });
