@@ -14,6 +14,8 @@ import { ISignupDto } from '../dtos/signup.dto';
 import { TransactionHelper } from '../../infra/database/helpers/transaction.helper';
 import { UserRepository } from '../../infra/database/repositories/user.repository';
 import { OrganizationRepository } from '../../infra/database/repositories/organization.repository';
+import { EmployeeRepository } from '../../infra/database/repositories/employee.repository';
+import { JobTitleRepository } from '../../infra/database/repositories/job_title.repository';
 
 const features: ITransactionHelperMockFeatures = {
   save(data: any[]): any[] {
@@ -34,6 +36,8 @@ describe('SignupService', () => {
   let organizationRepository: OrganizationRepository;
   let transactionHelper: TransactionHelper;
   let userRepository: UserRepository;
+  let employeeRepository: EmployeeRepository;
+  let jobTitleRepository: JobTitleRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -53,6 +57,8 @@ describe('SignupService', () => {
     signupService = module.get(SignupService);
     userRepository = module.get(UserRepository);
     organizationRepository = module.get(OrganizationRepository);
+    employeeRepository = module.get(EmployeeRepository);
+    jobTitleRepository = module.get(JobTitleRepository);
 
     jest
       .spyOn(userRepository, 'findOne')
@@ -74,6 +80,28 @@ describe('SignupService', () => {
       expect(organizationRepository.create).toBeCalledTimes(1);
       expect(organizationRepository.create).toBeCalledWith({
         name: sut.organizationName,
+      });
+    });
+
+    it('Should create a employee with correct data', async () => {
+      jest.spyOn(employeeRepository, 'create');
+      const organizationSpy = jest.spyOn(organizationRepository, 'create');
+      const userCreateSpy = jest.spyOn(userRepository, 'create');
+      const jobTitleSpy = jest.spyOn(jobTitleRepository, 'findOneByName');
+
+      const sut = createSut();
+      await signupService.handle(sut);
+
+      const user = await userCreateSpy.mock.results[0].value;
+      const jobTitle = await jobTitleSpy.mock.results[0].value;
+      const organization = await organizationSpy.mock.results[0].value;
+
+      expect(employeeRepository.create).toBeCalledTimes(1);
+      expect(employeeRepository.create).toBeCalledWith({
+        organizationId: organization.id,
+        userId: user.id,
+        isOwner: true,
+        jobTitleId: jobTitle.id,
       });
     });
   });
