@@ -1,4 +1,4 @@
-import { createUseClassMockProvider } from 'test/mocks/create_mock.helper';
+import { createUseClassMockProvider } from '../../../mocks/create_mock.helper';
 import {
   ICryptographyAdapter,
   CRYPTOGRAPHY_KEY,

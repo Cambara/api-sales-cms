@@ -5,14 +5,14 @@ import { UserEntity } from '../entities/user.entity';
 import { TransactionHelper } from '../helpers/transaction.helper';
 import { convertDbToModel } from '../mappers/profile.mapper';
 
-interface ICreateDto {
+export interface ICreateDto {
   firstName: string;
   lastName: string;
   userId: number;
 }
 
 export interface IProfileRepository {
-  create(ICreateDto): Promise<ProfileModel>;
+  create(dto: ICreateDto): Promise<ProfileModel>;
 }
 
 @Injectable()
