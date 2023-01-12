@@ -13,6 +13,7 @@ import { SignupService } from './signup.service';
 import { ISignupDto } from '../dtos/signup.dto';
 import { TransactionHelper } from '../../infra/database/helpers/transaction.helper';
 import { UserRepository } from '../../infra/database/repositories/user.repository';
+import { OrganizationRepository } from '../../infra/database/repositories/organization.repository';
 
 const features: ITransactionHelperMockFeatures = {
   save(data: any[]): any[] {
@@ -30,6 +31,7 @@ const createSut = (): ISignupDto => ({
 
 describe('SignupService', () => {
   let signupService: SignupService;
+  let organizationRepository: OrganizationRepository;
   let transactionHelper: TransactionHelper;
   let userRepository: UserRepository;
 
@@ -46,9 +48,12 @@ describe('SignupService', () => {
         CryptographyAdapterMock,
       ],
     }).compile();
+
     transactionHelper = module.get(TransactionHelper);
     signupService = module.get(SignupService);
     userRepository = module.get(UserRepository);
+    organizationRepository = module.get(OrganizationRepository);
+
     jest
       .spyOn(userRepository, 'findOne')
       .mockImplementation(() => Promise.resolve(null));
@@ -60,6 +65,16 @@ describe('SignupService', () => {
       const sut = createSut();
       await signupService.handle(sut);
       expect(transactionHelper.startTransaction).toBeCalledTimes(1);
+    });
+
+    it('Should create a organization with correct data', async () => {
+      jest.spyOn(organizationRepository, 'create');
+      const sut = createSut();
+      await signupService.handle(sut);
+      expect(organizationRepository.create).toBeCalledTimes(1);
+      expect(organizationRepository.create).toBeCalledWith({
+        name: sut.organizationName,
+      });
     });
   });
 });
