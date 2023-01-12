@@ -23,7 +23,7 @@ interface ICreateAccountResponse {
 }
 
 @Injectable()
-export class CredentialService {
+export class SignupService {
   private readonly jobTitleName = 'ADMINISTRATOR';
   constructor(
     private readonly transactionHelper: TransactionHelper,
@@ -36,7 +36,7 @@ export class CredentialService {
     private readonly cryptographyAdapter: ICryptographyAdapter,
   ) {}
 
-  async signup(dto: ISignupDto): Promise<void> {
+  async handle(dto: ISignupDto): Promise<void> {
     const hasUser = await this.userRepository.findOne({ email: dto.email });
 
     if (hasUser) {
