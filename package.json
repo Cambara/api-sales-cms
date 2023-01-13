@@ -86,7 +86,8 @@
       "**/*.helper.(t|j)s",
       "**/*.mapper.(t|j)s",
       "**/*.model.(t|j)s",
-      "**/*.repository.(t|j)s"
+      "**/*.repository.(t|j)s",
+      "**/*.validator.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
