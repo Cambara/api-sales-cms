@@ -1,13 +1,23 @@
-import { Module } from '@nestjs/common';
+import { Module, Provider } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { configEnum } from '../../config/config.loader';
+import { ICryptographyConfig } from '../../config/config_loader.interface';
+import { BcryptAdapter } from './bcrypt.adapter';
 import { CRYPTOGRAPHY_KEY } from './cryptography.protocol';
-import { CryptographyMockAdapter } from './mock.adapter';
 
-const CryptographyAdapter = {
+const CryptographyAdapter: Provider = {
   provide: CRYPTOGRAPHY_KEY,
-  useClass: CryptographyMockAdapter,
+  useFactory: (configService: ConfigService) => {
+    const { salt } = configService.get<ICryptographyConfig>(
+      configEnum.CRYPTOGRAPHY,
+    );
+    return new BcryptAdapter(salt);
+  },
+  inject: [ConfigService],
 };
 
 @Module({
+  imports: [ConfigModule],
   providers: [CryptographyAdapter],
   exports: [CryptographyAdapter],
 })

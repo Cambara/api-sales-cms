@@ -6,7 +6,7 @@ import {
 
 export class Mock implements ICryptographyAdapter {
   async encrypt(value: string): Promise<string> {
-    return Promise.resolve(`${value}_encripty`);
+    return Promise.resolve(`${value}_encrypted`);
   }
 
   async isMatch(): Promise<boolean> {
