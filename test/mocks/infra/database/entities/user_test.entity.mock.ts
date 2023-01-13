@@ -9,6 +9,9 @@ const row: IUserTestModel = {
 };
 
 class Mock implements IDefaultMockEntity {
+  findOne(): Promise<UserTestEntity> {
+    return Promise.resolve(row);
+  }
   find(): Promise<UserTestEntity[]> {
     return Promise.resolve([row]);
   }

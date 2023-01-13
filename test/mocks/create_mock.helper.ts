@@ -14,3 +14,8 @@ export const createMockProvider = (provide: any, mock: any) => ({
   provide,
   useValue: mock,
 });
+
+export const createUseClassMockProvider = (provide: any, mock: any) => ({
+  provide,
+  useClass: mock,
+});
