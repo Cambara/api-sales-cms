@@ -1,6 +1,11 @@
 import bcrypt from 'bcrypt';
 import { BcryptAdapter } from './bcrypt.adapter';
-import {} from 'test/mocks/libs/bcrypt/bcrypt.mock';
+
+const hashValue = 'hash';
+jest.mock('bcrypt', () => ({
+  hash: jest.fn(() => Promise.resolve(hashValue)),
+  compare: jest.fn(() => Promise.resolve(true)),
+}));
 
 const createSut = () => {
   const salt = 10;
@@ -21,6 +26,12 @@ describe('BcryptAdapter', () => {
 
       expect(bcrypt.hash).toBeCalledTimes(1);
       expect(bcrypt.hash).toHaveBeenCalledWith(value, salt);
+    });
+
+    it('Should return the valid hash value', async () => {
+      const { cryptAdapter } = createSut();
+      const hash = await cryptAdapter.encrypt('string');
+      expect(hash).toEqual(hashValue);
     });
   });
 });
