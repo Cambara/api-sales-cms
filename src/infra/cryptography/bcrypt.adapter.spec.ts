@@ -34,4 +34,17 @@ describe('BcryptAdapter', () => {
       expect(hash).toEqual(hashValue);
     });
   });
+
+  describe('isMatch', () => {
+    it('Should match the value with hash', async () => {
+      const { cryptAdapter } = createSut();
+      jest.spyOn(bcrypt, 'hash');
+      const value = 'string';
+      const isValid = await cryptAdapter.isMatch(value, hashValue);
+
+      expect(isValid).toBe(true);
+      expect(bcrypt.compare).toBeCalledTimes(1);
+      expect(bcrypt.compare).toHaveBeenCalledWith(value, hashValue);
+    });
+  });
 });
