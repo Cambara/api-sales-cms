@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserModel } from '../../../domain/models/user.model';
-import { ProfileEntity } from '../entities/profile.entity';
 import { UserEntity } from '../entities/user.entity';
 import { TransactionHelper } from '../helpers/transaction.helper';
 import { convertDbToModel } from '../mappers/user.mapper';

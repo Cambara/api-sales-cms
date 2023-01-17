@@ -9,7 +9,6 @@ import {
 } from 'typeorm';
 import { IUserModel } from 'src/domain/models/user.model';
 import { ProfileEntity } from './profile.entity';
-import { IEmployeeModel } from 'src/domain/models/employee.model';
 import { EmployeeEntity } from './employee.entity';
 
 @Entity({
