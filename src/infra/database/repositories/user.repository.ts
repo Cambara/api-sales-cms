@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserModel } from '../../../domain/models/user.model';
+import { ProfileEntity } from '../entities/profile.entity';
 import { UserEntity } from '../entities/user.entity';
 import { TransactionHelper } from '../helpers/transaction.helper';
 import { convertDbToModel } from '../mappers/user.mapper';
@@ -13,6 +14,7 @@ export interface ICreateDto {
 
 export interface IFindOneDto {
   email?: string;
+  withProfile?: boolean;
 }
 
 export interface IUserRepository {
@@ -42,8 +44,8 @@ export class UserRepository implements IUserRepository {
       where: {
         email,
       },
+      relations: ['profile', 'employees', 'employees.organization'],
     });
-
     return user ? convertDbToModel(user) : null;
   }
 }

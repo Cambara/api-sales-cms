@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -37,11 +38,14 @@ export class EmployeeEntity implements IEmployeeModel {
   })
   isBlocked: boolean;
 
-  @OneToOne(() => OrganizationEntity)
+  @ManyToOne(
+    () => OrganizationEntity,
+    (organization: OrganizationEntity) => organization.employees,
+  )
   @JoinColumn({ name: 'organization_id' })
   organization: OrganizationEntity;
 
-  @OneToOne(() => UserEntity)
+  @ManyToOne(() => UserEntity, (user: UserEntity) => user.employees)
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 
