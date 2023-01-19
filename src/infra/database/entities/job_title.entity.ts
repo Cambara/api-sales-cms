@@ -25,5 +25,5 @@ export class JobTitleEntity implements IJobTitleModel {
     () => EmployeeEntity,
     (employee: EmployeeEntity) => employee.jobTitle,
   )
-  employees: EmployeeEntity[];
+  employees?: EmployeeEntity[];
 }
