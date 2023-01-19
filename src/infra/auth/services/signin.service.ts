@@ -41,6 +41,10 @@ export class SigninService {
       throw new UnauthorizedException('Wrong password');
     }
 
+    if (!user.canAuthenticate()) {
+      throw new UnauthorizedException('you can not use the system');
+    }
+
     return convertModelToDto(user);
   }
 }
