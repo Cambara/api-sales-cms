@@ -19,6 +19,7 @@ export const dataSourceOptions: DataSourceOptions = {
       rejectUnauthorized: false,
     },
   },
+  logging: !!process.env.DB_DISPLAY_LOGGING,
 };
 
 const dataSource = new DataSource(dataSourceOptions);
