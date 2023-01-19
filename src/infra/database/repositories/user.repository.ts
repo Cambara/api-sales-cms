@@ -43,7 +43,12 @@ export class UserRepository implements IUserRepository {
       where: {
         email,
       },
-      relations: ['profile', 'employees', 'employees.organization'],
+      relations: [
+        'profile',
+        'employees',
+        'employees.organization',
+        'employees.jobTitle',
+      ],
     });
     return user ? convertDbToModel(user) : null;
   }

@@ -4,7 +4,6 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -49,7 +48,10 @@ export class EmployeeEntity implements IEmployeeModel {
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 
-  @OneToOne(() => JobTitleEntity)
+  @ManyToOne(
+    () => JobTitleEntity,
+    (jobTitle: JobTitleEntity) => jobTitle.employees,
+  )
   @JoinColumn({ name: 'job_title_id' })
   jobTitle?: JobTitleEntity;
 
