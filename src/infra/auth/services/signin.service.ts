@@ -10,6 +10,7 @@ import {
 } from '../../cryptography/cryptography.protocol';
 import { UserRepository } from '../../database/repositories/user.repository';
 import { UserDto } from '../../../shared/dtos/user.dto';
+import { convertModelToDto } from 'src/shared/mappers/user.mapper';
 
 interface ISigninServiceHandle {
   email: string;
@@ -40,6 +41,6 @@ export class SigninService {
       throw new UnauthorizedException('Wrong password');
     }
 
-    return user as undefined as UserDto;
+    return convertModelToDto(user);
   }
 }
