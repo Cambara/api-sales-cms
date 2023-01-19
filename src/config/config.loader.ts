@@ -3,6 +3,7 @@ import { IConfigLoader } from './config_loader.interface';
 export enum configEnum {
   HTTP = 'http',
   CRYPTOGRAPHY = 'cryptography',
+  JWT = 'jwt',
 }
 
 const getConfig = (): IConfigLoader => ({
@@ -12,6 +13,10 @@ const getConfig = (): IConfigLoader => ({
   },
   cryptography: {
     salt: Number(process.env.CRYPTOGRAPHY_SALT) || 10,
+  },
+  jwt: {
+    secret: process.env.JWT_SECRET || 'jwt_secret',
+    expiresIn: process.env.JWT_EXPIRES_IN || '1d',
   },
 });
 
