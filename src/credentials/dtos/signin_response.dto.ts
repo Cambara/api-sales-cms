@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IUserDto, UserDto } from './user.dto';
+import { IUserDto, UserDto } from '../../shared/dtos/user.dto';
 
 export interface ISigninResponseDto {
   readonly user: IUserDto;
