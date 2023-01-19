@@ -7,12 +7,14 @@ import { SigninService } from '../services/signin.service';
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly signinService: SigninService) {
-    super();
+    super({
+      usernameField: 'email',
+    });
   }
 
-  async validate(username: string, password: string): Promise<UserDto> {
+  async validate(email: string, password: string): Promise<UserDto> {
     const user = await this.signinService.handle({
-      email: username,
+      email,
       password,
     });
     return user;
