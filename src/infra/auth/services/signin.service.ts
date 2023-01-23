@@ -10,15 +10,19 @@ import {
 } from '../../cryptography/cryptography.protocol';
 import { UserRepository } from '../../database/repositories/user.repository';
 import { UserDto } from '../../../shared/dtos/user.dto';
-import { convertModelToDto } from 'src/shared/mappers/user.mapper';
+import { convertModelToDto } from '../../../shared/mappers/user.mapper';
 
-interface ISigninServiceHandle {
+export interface ISigninServiceHandle {
   email: string;
   password: string;
 }
 
+export interface ISigninService {
+  handle(dto: ISigninServiceHandle): Promise<UserDto>;
+}
+
 @Injectable()
-export class SigninService {
+export class SigninService implements ISigninService {
   constructor(
     private readonly userRepository: UserRepository,
     @Inject(CRYPTOGRAPHY_KEY)

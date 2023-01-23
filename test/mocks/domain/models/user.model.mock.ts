@@ -5,10 +5,15 @@ import {
 import { JobTitleModel } from '../../../../src/domain/models/job_title.model';
 import { OrganizationModel } from '../../../../src/domain/models/organization.model';
 import { ProfileModel } from '../../../../src/domain/models/profile.model';
-import { UserModel } from '../../../../src/domain/models/user.model';
+import {
+  IUserModel,
+  UserModel,
+} from '../../../../src/domain/models/user.model';
 import { createEmployeeModelSut } from './employee.model.mock';
 
-export const createUserModelSut = (): UserModel => {
+export const createUserModelSut = ({
+  email,
+}: Partial<IUserModel> = {}): UserModel => {
   const profile = new ProfileModel({
     id: 1,
     firstName: 'first_name_str',
@@ -17,7 +22,7 @@ export const createUserModelSut = (): UserModel => {
   const employee = createEmployeeModelSut();
   const userModel = new UserModel({
     id: 1,
-    email: 'email@host.com',
+    email: email || 'email@host.com',
     password: 'password_str',
     isBlocked: false,
     profile,
