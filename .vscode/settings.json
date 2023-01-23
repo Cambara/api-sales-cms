@@ -4,6 +4,7 @@
     },
     "cSpell.words": [
         "nestjs",
-        "Signin"
-    ]
+        "signin"
+    ],
+    "typescript.preferences.importModuleSpecifier": "relative"
 }
