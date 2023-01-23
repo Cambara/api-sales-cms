@@ -6,6 +6,7 @@ import {
   ICreateDto,
   IFindOneDto,
 } from '../../../../../src/infra/database/repositories/user.repository';
+import { createUserModelSut } from '../../../domain/models/user.model.mock';
 
 class Mock implements IUserRepository {
   create({ email, password }: ICreateDto): Promise<UserModel> {
@@ -21,14 +22,7 @@ class Mock implements IUserRepository {
   }
 
   findOne({ email }: IFindOneDto): Promise<UserModel> {
-    const row = new UserModel({
-      id: 1,
-      email: email,
-      password: 'password_encrypt',
-      isBlocked: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
+    const row = createUserModelSut({ email });
     return Promise.resolve(row);
   }
 }
