@@ -3,7 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -37,15 +37,21 @@ export class EmployeeEntity implements IEmployeeModel {
   })
   isBlocked: boolean;
 
-  @OneToOne(() => OrganizationEntity)
+  @ManyToOne(
+    () => OrganizationEntity,
+    (organization: OrganizationEntity) => organization.employees,
+  )
   @JoinColumn({ name: 'organization_id' })
   organization: OrganizationEntity;
 
-  @OneToOne(() => UserEntity)
+  @ManyToOne(() => UserEntity, (user: UserEntity) => user.employees)
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 
-  @OneToOne(() => JobTitleEntity)
+  @ManyToOne(
+    () => JobTitleEntity,
+    (jobTitle: JobTitleEntity) => jobTitle.employees,
+  )
   @JoinColumn({ name: 'job_title_id' })
   jobTitle?: JobTitleEntity;
 

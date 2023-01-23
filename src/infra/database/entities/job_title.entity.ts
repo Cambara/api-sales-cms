@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { IJobTitleModel } from '../../../domain/models/job_title.model';
+import { EmployeeEntity } from './employee.entity';
 
 @Entity({
   name: 'job_title',
@@ -19,4 +20,10 @@ export class JobTitleEntity implements IJobTitleModel {
     nullable: false,
   })
   isActivated: boolean;
+
+  @OneToMany(
+    () => EmployeeEntity,
+    (employee: EmployeeEntity) => employee.jobTitle,
+  )
+  employees?: EmployeeEntity[];
 }

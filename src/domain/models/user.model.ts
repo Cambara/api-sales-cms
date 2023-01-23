@@ -31,4 +31,23 @@ export class UserModel
     this.profile = data.profile;
     this.employees = data.employees;
   }
+
+  canAuthenticate(): boolean {
+    if (this.isBlocked || !this.employees || this.employees.length < 0) {
+      return false;
+    }
+
+    const isValid = this.employees.some(
+      ({ isActivated, isBlocked, organization }) => {
+        const isInvalid =
+          !isActivated ||
+          isBlocked ||
+          !organization ||
+          !organization.isActivated;
+        return !isInvalid;
+      },
+    );
+
+    return isValid;
+  }
 }

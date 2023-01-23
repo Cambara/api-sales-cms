@@ -13,6 +13,7 @@ export interface ICreateDto {
 
 export interface IFindOneDto {
   email?: string;
+  withProfile?: boolean;
 }
 
 export interface IUserRepository {
@@ -42,8 +43,13 @@ export class UserRepository implements IUserRepository {
       where: {
         email,
       },
+      relations: [
+        'profile',
+        'employees',
+        'employees.organization',
+        'employees.jobTitle',
+      ],
     });
-
     return user ? convertDbToModel(user) : null;
   }
 }

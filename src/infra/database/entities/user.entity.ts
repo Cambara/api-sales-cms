@@ -2,13 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { IUserModel } from 'src/domain/models/user.model';
-import { IProfileModel } from 'src/domain/models/profile.model';
 import { ProfileEntity } from './profile.entity';
+import { EmployeeEntity } from './employee.entity';
 
 @Entity({
   name: 'user',
@@ -34,7 +35,10 @@ export class UserEntity implements IUserModel {
   isBlocked: boolean;
 
   @OneToOne(() => ProfileEntity, (profile: ProfileEntity) => profile.user)
-  profile: IProfileModel;
+  profile: ProfileEntity;
+
+  @OneToMany(() => EmployeeEntity, (employee: EmployeeEntity) => employee.user)
+  employees?: EmployeeEntity[];
 
   @CreateDateColumn({
     name: 'created_at',
