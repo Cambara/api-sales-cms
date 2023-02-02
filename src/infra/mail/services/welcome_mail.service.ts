@@ -1,12 +1,10 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
-  MailAdapter,
-  MAIL_ADAPTER_KEY,
   IWelcomeMailParameters,
   IWelcomeMailSubjectParameters,
-  TemplateService,
   TemplateEnum,
 } from '../protocols';
+import { AbstractMailService } from './abstract_mail.service';
 
 interface IHandleDto {
   username: string;
@@ -15,13 +13,7 @@ interface IHandleDto {
 }
 
 @Injectable()
-export class WelcomeMailService {
-  constructor(
-    @Inject(MAIL_ADAPTER_KEY)
-    private readonly mailAdapter: MailAdapter,
-    private readonly templateService: TemplateService,
-  ) {}
-
+export class WelcomeMailService extends AbstractMailService<IHandleDto> {
   async sendMail({ username, language, email }: IHandleDto): Promise<void> {
     const [subject, { html, text }] = await Promise.all([
       this.templateService.getSubject<IWelcomeMailSubjectParameters>({
