@@ -4,6 +4,7 @@ export enum configEnum {
   HTTP = 'http',
   CRYPTOGRAPHY = 'cryptography',
   JWT = 'jwt',
+  MAIL = 'mail',
 }
 
 const getConfig = (): IConfigLoader => ({
@@ -17,6 +18,16 @@ const getConfig = (): IConfigLoader => ({
   jwt: {
     secret: process.env.JWT_SECRET || 'jwt_secret',
     expiresIn: process.env.JWT_EXPIRES_IN || '1d',
+  },
+  mail: {
+    host: process.env.MAIL_HOST || 'MAIL_HOST',
+    port: process.env.MAIL_PORT ? Number(process.env.MAIL_PORT) : 2525,
+    secure: process.env.MAIL_SECURE
+      ? Boolean(Number(process.env.MAIL_SECURE))
+      : false,
+    username: process.env.MAIL_USERNAME || 'MAIL_USERNAME',
+    password: process.env.MAIL_PASSWORD || 'MAIL_PASSWORD',
+    defaultFrom: process.env.MAIL_DEFAULT_FROM || 'app@test.com',
   },
 });
 
