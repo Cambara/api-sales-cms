@@ -9,6 +9,7 @@ export interface IUserModel extends IDefaultWithTimestampsModel {
   email: string;
   password: string;
   isBlocked: boolean;
+  languageCode: string;
   profile?: IProfileModel;
   employees?: IEmployeeModel[];
 }
@@ -21,6 +22,7 @@ export class UserModel
   password: string;
   isBlocked: boolean;
   employees?: IEmployeeModel[];
+  languageCode: string;
   profile?: IProfileModel;
 
   constructor({ id, createdAt, updatedAt, ...data }: IUserModel) {
@@ -30,6 +32,7 @@ export class UserModel
     this.isBlocked = data.isBlocked;
     this.profile = data.profile;
     this.employees = data.employees;
+    this.languageCode = data.languageCode;
   }
 
   canAuthenticate(): boolean {

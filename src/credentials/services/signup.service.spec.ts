@@ -185,6 +185,7 @@ describe('SignupService', () => {
         email: 'email@host.com',
         password: 'password',
         isBlocked: false,
+        languageCode: 'en',
       });
 
       const userFindSpy = jest

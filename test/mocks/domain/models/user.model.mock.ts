@@ -22,6 +22,7 @@ export const createUserModelSut = ({
     isBlocked: typeof isBlocked === 'boolean' ? isBlocked : false,
     profile,
     employees: [employee],
+    languageCode: 'en',
   });
   return userModel;
 };
