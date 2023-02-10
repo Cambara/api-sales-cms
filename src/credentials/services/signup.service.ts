@@ -12,6 +12,7 @@ import { UserRepository } from '../../infra/database/repositories/user.repositor
 import { TransactionHelper } from '../../infra/database/helpers/transaction.helper';
 import { OrganizationRepository } from '../../infra/database/repositories/organization.repository';
 import { ISignupDto } from '../dtos/signup.dto';
+import { WelcomeMailService } from '../../infra/mail/services/welcome_mail.service';
 
 type ICreateAccount = ISignupDto & {
   jobTitleId: number;
@@ -32,6 +33,7 @@ export class SignupService {
     private readonly organizationRepository: OrganizationRepository,
     private readonly profileRepository: ProfileRepository,
     private readonly userRepository: UserRepository,
+    private readonly welcomeMailService: WelcomeMailService,
     @Inject(CRYPTOGRAPHY_KEY)
     private readonly cryptographyAdapter: ICryptographyAdapter,
   ) {}
@@ -91,6 +93,11 @@ export class SignupService {
       });
 
       await Promise.all([employeePromise, profilePromise]);
+      await this.welcomeMailService.sendMail({
+        username: `${firstName} ${lastName}`,
+        email,
+        language: 'en',
+      });
       await this.transactionHelper.commit();
 
       return { user, organization };

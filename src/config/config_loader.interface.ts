@@ -12,8 +12,18 @@ export interface IJwtConfig {
   expiresIn: string;
 }
 
+export interface IMailConfig {
+  host: string;
+  port: number;
+  secure: boolean;
+  username: string;
+  password: string;
+  defaultFrom: string;
+}
+
 export interface IConfigLoader {
   http: IHttpConfig;
   cryptography: ICryptographyConfig;
   jwt: IJwtConfig;
+  mail: IMailConfig;
 }
