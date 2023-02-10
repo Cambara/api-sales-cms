@@ -22,6 +22,8 @@ import {
 } from '../../infra/cryptography/cryptography.protocol';
 import { ProfileRepository } from '../../infra/database/repositories/profile.repository';
 import { UserModel } from '../../domain/models/user.model';
+import { WelcomeMailServiceMock } from '../../../test/mocks/infra/mail/services/abstract_mail.service.mock';
+import { WelcomeMailService } from '../../infra/mail/services/welcome_mail.service';
 
 const features: ITransactionHelperMockFeatures = {
   save(data: any[]): any[] {
@@ -46,6 +48,7 @@ describe('SignupService', () => {
   let jobTitleRepository: JobTitleRepository;
   let cryptographyAdapter: ICryptographyAdapter;
   let profileRepository: ProfileRepository;
+  let welcomeMailService: WelcomeMailService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -58,6 +61,7 @@ describe('SignupService', () => {
         UserRepositoryMock,
         ProfileRepositoryMock,
         CryptographyAdapterMock,
+        WelcomeMailServiceMock,
       ],
     }).compile();
 
@@ -69,6 +73,7 @@ describe('SignupService', () => {
     jobTitleRepository = module.get(JobTitleRepository);
     cryptographyAdapter = module.get(CRYPTOGRAPHY_KEY);
     profileRepository = module.get(ProfileRepository);
+    welcomeMailService = module.get(WelcomeMailService);
 
     jest
       .spyOn(userRepository, 'findOne')
@@ -160,6 +165,18 @@ describe('SignupService', () => {
 
       expect(transactionHelper.commit).toBeCalledTimes(1);
       expect(transactionHelper.rollback).toBeCalledTimes(0);
+    });
+
+    it('Should send an email after create a user', async () => {
+      jest.spyOn(transactionHelper, 'commit');
+      jest.spyOn(transactionHelper, 'rollback');
+      jest.spyOn(welcomeMailService, 'sendMail');
+      const sut = createSut();
+      await signupService.handle(sut);
+
+      expect(transactionHelper.commit).toBeCalledTimes(1);
+      expect(transactionHelper.rollback).toBeCalledTimes(0);
+      expect(welcomeMailService.sendMail).toBeCalledTimes(1);
     });
 
     it('Should throw an error when finding a user with the same email', async () => {
