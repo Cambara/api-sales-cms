@@ -30,6 +30,7 @@ describe('JwtTokenService', () => {
         email: 'email',
         employees: [],
         id: 1,
+        languageCode: 'en',
         profile: {
           firstName: 'fist_name',
           lastName: 'last_name',

@@ -5,6 +5,7 @@ import { IProfileDto, ProfileDto } from './profile.dto';
 export interface IUserDto {
   readonly id: number;
   readonly email: string;
+  readonly languageCode: string;
   readonly profile: IProfileDto;
   readonly employees: IEmployeeDto[];
 }
@@ -23,6 +24,13 @@ export class UserDto implements IUserDto {
     required: true,
   })
   readonly email: string;
+
+  @ApiProperty({
+    type: String,
+    nullable: false,
+    required: true,
+  })
+  readonly languageCode: string;
 
   @ApiProperty({
     type: ProfileDto,

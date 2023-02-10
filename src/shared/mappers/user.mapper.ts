@@ -11,6 +11,7 @@ export const convertModelToDto = (userModel: UserModel): UserDto => {
   const user: UserDto = Object.assign(new UserDto(), {
     id: userModel.id,
     email: userModel.email,
+    languageCode: userModel.languageCode,
     profile: convertProfileModelToDto(userModel.profile),
     employees: userModel.employees
       ? userModel.employees.map(convertEmployeeModelToDto)
