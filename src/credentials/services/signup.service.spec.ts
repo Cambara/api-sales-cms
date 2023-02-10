@@ -37,6 +37,7 @@ const createSut = (): ISignupDto => ({
   lastName: 'last_name_str',
   organizationName: 'organization_name_str',
   password: 'password_str',
+  languageCode: 'en',
 });
 
 describe('SignupService', () => {
@@ -137,6 +138,7 @@ describe('SignupService', () => {
       expect(userRepository.create).toBeCalledWith({
         email: sut.email,
         password: encryptedPassword,
+        languageCode: sut.languageCode,
       });
     });
 

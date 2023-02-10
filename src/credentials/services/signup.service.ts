@@ -64,15 +64,18 @@ export class SignupService {
     firstName,
     lastName,
     jobTitleId,
+    languageCode,
   }: ICreateAccount): Promise<ICreateAccountResponse> {
     await this.transactionHelper.startTransaction();
     try {
       const organizationPromise = await this.organizationRepository.create({
         name: organizationName,
       });
+
       const userPromise = await this.userRepository.create({
         email,
         password,
+        languageCode,
       });
 
       const [organization, user] = await Promise.all([
@@ -96,7 +99,7 @@ export class SignupService {
       await this.welcomeMailService.sendMail({
         username: `${firstName} ${lastName}`,
         email,
-        language: 'en',
+        language: languageCode,
       });
       await this.transactionHelper.commit();
 

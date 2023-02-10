@@ -10,6 +10,7 @@ export interface ISignupDto {
   readonly password: string;
   readonly firstName: string;
   readonly lastName: string;
+  readonly languageCode: string;
 }
 
 export class SignupDto implements ISignupDto {
@@ -59,4 +60,13 @@ export class SignupDto implements ISignupDto {
   @IsString()
   @Transform(convertToLowerCase)
   readonly lastName: string;
+
+  @ApiProperty({
+    type: String,
+    nullable: false,
+    required: true,
+  })
+  @IsNotEmpty()
+  @IsString()
+  readonly languageCode: string;
 }
