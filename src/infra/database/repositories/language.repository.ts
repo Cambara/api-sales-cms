@@ -19,7 +19,7 @@ export class LanguageRepository implements ILanguageRepository {
     this.init();
   }
 
-  async findOneByCode(code): Promise<LanguageModel | null> {
+  async findOneByCode(code: string): Promise<LanguageModel | null> {
     const languageList = await this.cacheList;
     const language = languageList.find((language) => language.code === code);
 
