@@ -8,6 +8,7 @@ const row: IUserModel = {
   email: 'email@host.com',
   password: 'password',
   isBlocked: false,
+  languageCode: 'en',
   createdAt: new Date(),
   updatedAt: new Date(),
 };

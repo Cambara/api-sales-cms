@@ -24,6 +24,8 @@ import { ProfileRepository } from '../../infra/database/repositories/profile.rep
 import { UserModel } from '../../domain/models/user.model';
 import { WelcomeMailServiceMock } from '../../../test/mocks/infra/mail/services/abstract_mail.service.mock';
 import { WelcomeMailService } from '../../infra/mail/services/welcome_mail.service';
+import { LanguageRepository } from '../../infra/database/repositories/language.repository';
+import { LanguageRepositoryMock } from '../../../test/mocks/infra/database/repositories/language.repository.mock';
 
 const features: ITransactionHelperMockFeatures = {
   save(data: any[]): any[] {
@@ -37,6 +39,7 @@ const createSut = (): ISignupDto => ({
   lastName: 'last_name_str',
   organizationName: 'organization_name_str',
   password: 'password_str',
+  languageCode: 'en',
 });
 
 describe('SignupService', () => {
@@ -49,6 +52,7 @@ describe('SignupService', () => {
   let cryptographyAdapter: ICryptographyAdapter;
   let profileRepository: ProfileRepository;
   let welcomeMailService: WelcomeMailService;
+  let languageRepository: LanguageRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -62,6 +66,7 @@ describe('SignupService', () => {
         ProfileRepositoryMock,
         CryptographyAdapterMock,
         WelcomeMailServiceMock,
+        LanguageRepositoryMock,
       ],
     }).compile();
 
@@ -74,6 +79,7 @@ describe('SignupService', () => {
     cryptographyAdapter = module.get(CRYPTOGRAPHY_KEY);
     profileRepository = module.get(ProfileRepository);
     welcomeMailService = module.get(WelcomeMailService);
+    languageRepository = module.get(LanguageRepository);
 
     jest
       .spyOn(userRepository, 'findOne')
@@ -137,6 +143,7 @@ describe('SignupService', () => {
       expect(userRepository.create).toBeCalledWith({
         email: sut.email,
         password: encryptedPassword,
+        languageCode: sut.languageCode,
       });
     });
 
@@ -185,6 +192,7 @@ describe('SignupService', () => {
         email: 'email@host.com',
         password: 'password',
         isBlocked: false,
+        languageCode: 'en',
       });
 
       const userFindSpy = jest
@@ -198,6 +206,23 @@ describe('SignupService', () => {
       await expect(signupService.handle(sut)).rejects.toThrowError();
       const user = await userFindSpy.mock.results[0].value;
       expect(user).toBe(userMock);
+      expect(transactionHelper.commit).toBeCalledTimes(0);
+      expect(transactionHelper.rollback).toBeCalledTimes(0);
+    });
+
+    it('Should throw an error when send a invalid language code', async function () {
+      const languageCodeFindSpy = jest
+        .spyOn(languageRepository, 'findOneByCode')
+        .mockImplementationOnce(() => Promise.resolve(null));
+      jest.spyOn(transactionHelper, 'commit');
+      jest.spyOn(transactionHelper, 'rollback');
+
+      const sut = createSut();
+
+      await expect(signupService.handle(sut)).rejects.toThrowError();
+      const language = await languageCodeFindSpy.mock.results[0].value;
+      expect(language).toBe(null);
+      expect(languageRepository.findOneByCode).toBeCalledTimes(1);
       expect(transactionHelper.commit).toBeCalledTimes(0);
       expect(transactionHelper.rollback).toBeCalledTimes(0);
     });

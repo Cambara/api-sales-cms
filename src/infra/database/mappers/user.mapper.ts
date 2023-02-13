@@ -9,6 +9,7 @@ export const convertDbToModel = (db: UserEntity): UserModel => {
     email: db.email,
     password: db.password,
     isBlocked: db.isBlocked,
+    languageCode: db.languageCode,
     createdAt: db.createdAt,
     updatedAt: db.updatedAt,
     profile: db.profile ? profileConvertDbToModel(db.profile) : undefined,

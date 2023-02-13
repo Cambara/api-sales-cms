@@ -13,6 +13,7 @@ import { TransactionHelper } from '../../infra/database/helpers/transaction.help
 import { OrganizationRepository } from '../../infra/database/repositories/organization.repository';
 import { ISignupDto } from '../dtos/signup.dto';
 import { WelcomeMailService } from '../../infra/mail/services/welcome_mail.service';
+import { LanguageRepository } from '../../infra/database/repositories/language.repository';
 
 type ICreateAccount = ISignupDto & {
   jobTitleId: number;
@@ -33,6 +34,7 @@ export class SignupService {
     private readonly organizationRepository: OrganizationRepository,
     private readonly profileRepository: ProfileRepository,
     private readonly userRepository: UserRepository,
+    private readonly languageRepository: LanguageRepository,
     private readonly welcomeMailService: WelcomeMailService,
     @Inject(CRYPTOGRAPHY_KEY)
     private readonly cryptographyAdapter: ICryptographyAdapter,
@@ -53,6 +55,14 @@ export class SignupService {
       throw new Error('Job title not found');
     }
 
+    const language = await this.languageRepository.findOneByCode(
+      dto.languageCode,
+    );
+
+    if (!language) {
+      throw new ConflictException('Not found the language code');
+    }
+
     const password = await this.cryptographyAdapter.encrypt(dto.password);
     await this.createAccount({ ...dto, password, jobTitleId: jobTitle.id });
   }
@@ -64,15 +74,18 @@ export class SignupService {
     firstName,
     lastName,
     jobTitleId,
+    languageCode,
   }: ICreateAccount): Promise<ICreateAccountResponse> {
     await this.transactionHelper.startTransaction();
     try {
       const organizationPromise = await this.organizationRepository.create({
         name: organizationName,
       });
+
       const userPromise = await this.userRepository.create({
         email,
         password,
+        languageCode,
       });
 
       const [organization, user] = await Promise.all([
@@ -96,7 +109,7 @@ export class SignupService {
       await this.welcomeMailService.sendMail({
         username: `${firstName} ${lastName}`,
         email,
-        language: 'en',
+        language: languageCode,
       });
       await this.transactionHelper.commit();
 

@@ -9,6 +9,7 @@ import { convertDbToModel } from '../mappers/user.mapper';
 export interface ICreateDto {
   email: string;
   password: string;
+  languageCode: string;
 }
 
 export interface IFindOneDto {
@@ -29,11 +30,16 @@ export class UserRepository implements IUserRepository {
     private readonly userEntity: Repository<UserEntity>,
   ) {}
 
-  async create({ email, password }: ICreateDto): Promise<UserModel> {
+  async create({
+    email,
+    password,
+    languageCode,
+  }: ICreateDto): Promise<UserModel> {
     const data = new UserEntity();
     data.email = email;
     data.password = password;
     data.isBlocked = false;
+    data.languageCode = languageCode;
     const [entity] = await this.transactionHelper.save<UserEntity>([data]);
     return convertDbToModel(entity);
   }

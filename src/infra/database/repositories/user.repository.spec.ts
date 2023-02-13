@@ -46,6 +46,7 @@ describe('UserRepository', () => {
       const result = await userRepository.create({
         email: 'email@host.com',
         password: 'password',
+        languageCode: 'en',
       });
       expect(result.id).toEqual(1);
       expect(result.email).toEqual('email@host.com');

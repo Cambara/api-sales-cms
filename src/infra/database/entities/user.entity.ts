@@ -34,6 +34,12 @@ export class UserEntity implements IUserModel {
   })
   isBlocked: boolean;
 
+  @Column({
+    nullable: false,
+    name: 'language_code',
+  })
+  languageCode: string;
+
   @OneToOne(() => ProfileEntity, (profile: ProfileEntity) => profile.user)
   profile: ProfileEntity;
 

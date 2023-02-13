@@ -15,6 +15,7 @@ class Mock implements IUserRepository {
       email,
       password,
       isBlocked: false,
+      languageCode: 'en',
       createdAt: new Date(),
       updatedAt: new Date(),
     });
