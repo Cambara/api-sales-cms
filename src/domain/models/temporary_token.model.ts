@@ -3,7 +3,7 @@ import {
   IDefaultWithTimestampsModel,
 } from './default.model';
 
-enum TemporaryTokenTypeEnum {
+export enum TemporaryTokenTypeEnum {
   FORGOT_PASSWORD = 'forgot_password',
 }
 
