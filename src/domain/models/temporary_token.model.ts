@@ -10,7 +10,7 @@ export enum TemporaryTokenTypeEnum {
 export interface ITemporaryTokenModel extends IDefaultWithTimestampsModel {
   token: string;
   type: TemporaryTokenTypeEnum;
-  userIds: number[];
+  data: unknown;
   expiredAt: Date;
   usedAt?: Date;
 }
@@ -21,16 +21,16 @@ export class TemporaryTokenModel
 {
   readonly token: string;
   readonly type: TemporaryTokenTypeEnum;
-  readonly userIds: number[];
+  readonly data: unknown;
   readonly expiredAt: Date;
   readonly usedAt?: Date;
 
-  constructor({ id, createdAt, updatedAt, ...data }: ITemporaryTokenModel) {
+  constructor({ id, createdAt, updatedAt, ...dto }: ITemporaryTokenModel) {
     super({ id, createdAt, updatedAt });
-    this.token = data.token;
-    this.type = data.type;
-    this.userIds = data.userIds;
-    this.expiredAt = data.expiredAt;
-    this.usedAt = data.usedAt;
+    this.token = dto.token;
+    this.type = dto.type;
+    this.data = dto.data;
+    this.expiredAt = dto.expiredAt;
+    this.usedAt = dto.usedAt;
   }
 }
