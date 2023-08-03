@@ -5,6 +5,7 @@ export enum configEnum {
   CRYPTOGRAPHY = 'cryptography',
   JWT = 'jwt',
   MAIL = 'mail',
+  UNIQUE_IDENTIFIER = 'uniqueIdentifier',
 }
 
 const getConfig = (): IConfigLoader => ({
@@ -28,6 +29,9 @@ const getConfig = (): IConfigLoader => ({
     username: process.env.MAIL_USERNAME || 'MAIL_USERNAME',
     password: process.env.MAIL_PASSWORD || 'MAIL_PASSWORD',
     defaultFrom: process.env.MAIL_DEFAULT_FROM || 'app@test.com',
+  },
+  uniqueIdentifier: {
+    namespace: process.env.UNIQUE_IDENTIFIER_NAMESPACE || 'uuid_namespace',
   },
 });
 

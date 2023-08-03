@@ -21,9 +21,14 @@ export interface IMailConfig {
   defaultFrom: string;
 }
 
+export interface IUniqueIdentifierConfig {
+  namespace: string;
+}
+
 export interface IConfigLoader {
   http: IHttpConfig;
   cryptography: ICryptographyConfig;
   jwt: IJwtConfig;
   mail: IMailConfig;
+  uniqueIdentifier: IUniqueIdentifierConfig;
 }

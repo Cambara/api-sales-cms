@@ -5,7 +5,8 @@
     "cSpell.words": [
         "nestjs",
         "signin",
-        "typeorm"
+        "typeorm",
+        "uuidv"
     ],
     "typescript.preferences.importModuleSpecifier": "relative"
 }
